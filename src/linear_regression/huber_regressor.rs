@@ -1,5 +1,3 @@
-use rayon::prelude::*;
-
 /// Huber Regressor according to: Peter J. Huber, Elvezio M. Ronchetti, Robust Statistics Concomitant scale estimates, p. 172
 pub struct HuberRegressor {
     x: Vec<f64>,
@@ -51,7 +49,6 @@ impl HuberRegressor {
         let f_x = self.huber_loss(x);
 
         (0..x.len())
-            .into_par_iter()
             .map(|i| {
                 let mut x_forward = x.to_owned();
                 x_forward[i] += PERTURBATION;
