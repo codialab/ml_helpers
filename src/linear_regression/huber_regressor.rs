@@ -10,6 +10,7 @@ pub struct HuberRegressor {
     pub delta: f64,
     /// Tolerance values have to be in to stop the gradient descent
     pub tol: f64,
+    pub max_iter: usize,
 }
 
 impl HuberRegressor {
@@ -22,6 +23,7 @@ impl HuberRegressor {
             b: None,
             delta: 1.35,
             tol: 1e-6,
+            max_iter: 10000,
         }
     }
 
@@ -90,6 +92,8 @@ impl HuberRegressor {
 
         let mut abs_sum: f64 = grad.iter().map(|&grad_i| grad_i.abs()).sum();
 
+        let mut iterations = 0;
+
         while abs_sum >= self.tol {
             let a = self.line_search(x.clone(), grad.clone());
             x.iter_mut()
@@ -97,6 +101,10 @@ impl HuberRegressor {
                 .for_each(|(x_i, &grad_i)| *x_i -= a * grad_i);
             grad = self.forward_difference(&x);
             abs_sum = grad.iter().map(|&x| x.abs()).sum();
+            iterations += 1;
+            if iterations > self.max_iter {
+                break;
+            }
         }
         x
     }
@@ -140,6 +148,7 @@ mod tests {
         let mut reg = HuberRegressor::new();
         reg.fit(x, y);
         let params = reg.get_params().unwrap();
+        eprintln!("{:?}", params);
         assert!(within_tolerance(params.0, 2.0));
         assert!(within_tolerance(params.1, 1.0));
     }
