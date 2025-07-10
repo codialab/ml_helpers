@@ -4,4 +4,10 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+argmin = "0.10.0"
+argmin-math = { version = "0.4", features = ["ndarray_latest-nolinalg"] }
+argmin-observer-slog = { version = "*" }
+argmin_testfunctions = { version = "*" }
+finitediff = { version = "0.1.4", features = ["ndarray"] }
+ndarray = "0.15.6"
 rayon = "1.10.0"
