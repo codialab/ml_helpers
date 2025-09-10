@@ -99,7 +99,7 @@ pub fn solve(cost: HuberRegressor) -> Vec<f64> {
     let linesearch = MoreThuenteLineSearch::new().with_c(1e-4, 0.9).unwrap();
 
     // Set up solver
-    let solver = LBFGS::new(linesearch, 7);
+    let solver = LBFGS::new(linesearch, 5);
 
     // Run solver
     let res = Executor::new(cost, solver)
@@ -118,10 +118,10 @@ pub fn solve_with_logging(cost: HuberRegressor) -> Vec<f64> {
     let init_param: Array1<f64> = array![0.0, 0.0];
 
     // set up a line search
-    let linesearch = MoreThuenteLineSearch::new().with_c(1e-4, 0.9).unwrap();
+    let linesearch = MoreThuenteLineSearch::new().with_c(1e-3, 0.8).unwrap();
 
     // Set up solver
-    let solver = LBFGS::new(linesearch, 7);
+    let solver = LBFGS::new(linesearch, 5);
 
     // Run solver
     let res = Executor::new(cost, solver)
