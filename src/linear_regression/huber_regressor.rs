@@ -104,7 +104,29 @@ pub fn solve(cost: HuberRegressor) -> Vec<f64> {
     // Run solver
     let res = Executor::new(cost, solver)
         .configure(|state| state.param(init_param).max_iters(100))
-        // .add_observer(SlogLogger::term(), ObserverMode::Always)
+        .run()
+        .unwrap();
+
+    // Print result
+
+    let best = res.state().get_best_param().unwrap();
+    best.to_vec()
+}
+
+pub fn solve_with_logging(cost: HuberRegressor) -> Vec<f64> {
+    // Define initial parameter vector
+    let init_param: Array1<f64> = array![0.0, 0.0];
+
+    // set up a line search
+    let linesearch = MoreThuenteLineSearch::new().with_c(1e-4, 0.9).unwrap();
+
+    // Set up solver
+    let solver = LBFGS::new(linesearch, 7);
+
+    // Run solver
+    let res = Executor::new(cost, solver)
+        .configure(|state| state.param(init_param).max_iters(100))
+        .add_observer(SlogLogger::term(), ObserverMode::Always)
         .run()
         .unwrap();
 
