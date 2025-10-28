@@ -2,3 +2,4 @@
 
 /// This module contains helpers for linear regression
 pub mod linear_regression;
+pub mod other_regression;
