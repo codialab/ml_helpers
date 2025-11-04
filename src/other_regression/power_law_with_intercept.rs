@@ -68,7 +68,14 @@ pub fn solve(power_law: PowerLawIntercept) -> Vec<f64> {
     }
     // assert!(report.termination.was_successful());
     // assert!(report.objective_function.abs() < 1e-10);
-    result.get_params()
+    let mut params = result.get_params();
+    let success_bit = if report.termination.was_successful() {
+        1.0
+    } else {
+        0.0
+    };
+    params.push(success_bit);
+    params
 }
 
 #[cfg(test)]
